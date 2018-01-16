@@ -1,0 +1,49 @@
+<main role="main" class="container">
+
+    <div class="jumbotron text-center">
+
+        <h1 class="jumbotron-heading">Pedidos</h1>
+        <a class="btn btn-block btn-success" href="/#!/pedidos/new" role="button">Adicionar &raquo;</a>
+
+    </div>
+
+</main>
+
+<nav class="nav nav-pills nav-fill">
+    <a class="nav-item nav-link" ng-class="{'active': vm.isEmAberto}" ng-click="vm.emAberto()" href="">Em aberto</a>
+    <a class="nav-item nav-link" ng-class="{'active': vm.isAprovado}" ng-click="vm.aprovado()" href="">Aprovado</a>
+    <a class="nav-item nav-link" ng-class="{'active': vm.isEntregue}" ng-click="vm.entregue()" href="">Entregue</a>
+    <a class="nav-item nav-link" ng-class="{'active': vm.isCancelado}" ng-click="vm.cancelado()" href="">Cancelado</a>
+</nav>
+
+<br>
+
+<div class="card-columns">
+    <div ng-repeat="pedido in vm.pedidos" class="card" ng-class="{'border-primary': vm.isEmAberto, 'border-warning': vm.isAprovado, 'border-success': vm.isEntregue, 'border-danger': vm.isCancelado }">
+        <div class="card-header">
+            <h5 class="text-center card-title">{{pedido.cliente.nome}}</h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text">Realizado em {{vm.formatarData(pedido.data)}}</p>
+            <p class="card-text" ng-if="pedido.itens.length == 0">Sem itens</p>
+            <p class="card-text" ng-if="pedido.itens.length > 0">Valor total de R${{vm.valorTotal(pedido.itens)}}</p>
+            <p class="card-text" ng-if="pedido.itens.length > 0">Kg total de {{vm.pesoTotal(pedido.itens)}}Kg</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li ng-repeat="item in pedido.itens" class="list-group-item">{{vm.itemFormat(item)}}</li>
+        </ul>
+        <div class="card-body">
+            <button ng-if="vm.isEmAberto" ng-click="vm.aprovar(pedido)" class="btn btn-success btn-block">Aprovar</button>
+            <button ng-if="vm.isAprovado" ng-click="vm.entregar(pedido)" class="btn btn-success btn-block">Entregar</button>
+            <button ng-if="(vm.isEmAberto || vm.isAprovado)" ng-click="vm.cancelar(pedido)" class="btn btn-warning btn-block">Cancelar</button>
+        </div>
+        <div class="card-body">
+            <button ng-if="vm.isEmAberto" ng-click="vm.editar(pedido)" class="btn btn-primary btn-sm">Editar</button>
+            <button ng-if="vm.isEmAberto" ng-click="vm.excluir(pedido)" class="btn btn-danger btn-sm">Excluir</button>
+        </div>
+    </div>
+</div>
+
+<p ng-if="vm.pedidos.length === 0">
+    Não existe itens nessa situação.
+</p>

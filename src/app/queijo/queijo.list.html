@@ -1,0 +1,36 @@
+<main role="main" class="container">
+
+    <div class="jumbotron text-center">
+
+        <h1 class="jumbotron-heading">Queijos</h1>
+        <a class="btn btn-block btn-success" href="/#!/queijos/new" role="button">Adicionar &raquo;</a>
+
+    </div>
+
+</main>
+
+<nav class="nav nav-pills nav-fill">
+    <a class="nav-item nav-link" ng-class="{'active': vm.isDisponivel}" ng-click="vm.disponivel()" href="">Disponiveis</a>
+    <a class="nav-item nav-link" ng-class="{'active': vm.isEmPedido}" ng-click="vm.emPedido()" href="">Em pedido</a>
+    <a class="nav-item nav-link" ng-class="{'active': vm.isVendido}" ng-click="vm.vendido()" href="">Vendido</a>
+    <a class="nav-item nav-link" ng-class="{'active': vm.isEntregue}" ng-click="vm.entregue()" href="">Entregue</a>
+</nav>
+
+<br>
+
+<div class="card-columns">
+    <div ng-repeat="queijo in vm.queijos" class="card border-dark">
+        <div class="card-body">
+            <p class="card-text">Peso {{::queijo.peso}}Kg</p>
+            <p class="card-text">Lote {{::vm.formatarData(queijo.lote)}}</p>
+        </div>
+        <div class="card-body">
+                <button ng-click="vm.editar(queijo)" class="btn btn-sm btn-primary col-auto">Editar</button>
+                <button ng-click="vm.excluir(queijo)" class="btn btn-sm btn-danger col-auto">Excluir</button>
+        </div>
+    </div>
+</div>
+
+<p ng-if="vm.queijos.length === 0">
+    Não existe itens nessa situação.
+</p>

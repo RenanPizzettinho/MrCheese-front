@@ -1,0 +1,17 @@
+<div class="container ">
+    <h1>Queijos</h1>
+    <form>
+        <div class="row">
+            <div class="form-group col">
+                <label for="peso">Peso</label>
+                <input ng-model="vm.queijo.peso" type="number" class="form-control" id="peso" placeholder="Peso">
+            </div>
+            <div class="form-group col">
+                <label for="lote">Lote</label>
+                <input ng-model="vm.queijo.lote" type="date" class="form-control" id="lote" placeholder="Lote">
+            </div>
+        </div>
+
+        <button ng-click="vm.salvar()" type="submit" class="btn btn-primary">Cadastrar</button>
+    </form>
+</div>

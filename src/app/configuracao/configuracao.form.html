@@ -1,0 +1,13 @@
+<div class="container ">
+    <h1>Configuração de preço</h1>
+    <form>
+        <div class="row">
+            <div class="form-group col">
+                <label for="valor">Valor</label>
+                <input ng-model="vm.config.valor" type="number" class="form-control" id="valor" placeholder="Valor">
+            </div>
+        </div>
+
+        <button ng-click="vm.salvar()" type="submit" class="btn btn-primary">Cadastrar</button>
+    </form>
+</div>

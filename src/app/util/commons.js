@@ -1,0 +1,1 @@
+export const WEB_PATH = 'http://localhost:8080/mrCheese-web/api';
