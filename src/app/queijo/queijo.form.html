@@ -1,4 +1,4 @@
-<div class="container ">
+<div class="container mt-4">
     <h1>Queijos</h1>
     <form>
         <div class="row">
@@ -12,6 +12,6 @@
             </div>
         </div>
 
-        <button ng-click="vm.salvar()" type="submit" class="btn btn-primary">Cadastrar</button>
+        <button ng-click="vm.salvar()" type="submit" class="btn btn-primary">{{(vm.queijo.id) ? "Atualizar" : "Cadastrar"}}</button>
     </form>
 </div>
