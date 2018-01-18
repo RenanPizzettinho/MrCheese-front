@@ -3,11 +3,13 @@
         <h1 class="form-header">Pedido</h1>
 
         <div class="row">
-            <div class="form-group col">
+            <div class="form-group col-md-6">
                 <label for="cliente">Cliente</label>
-                <select name="cliente" id="cliente" class="form-control" ng-model="vm.pedido.cliente" required>
+                <select ng-if="!vm.pedido.id" ng-disabled="vm.clientes.length == 0" name="cliente" id="cliente" class="form-control" ng-model="vm.pedido.cliente"
+                    required>
                     <option ng-repeat="cliente in vm.clientes" ng-value="cliente">{{::cliente.nome}}</option>
                 </select>
+                <input ng-if="vm.pedido.id" ng-disabled="true" class="form-control" type="text" value="{{vm.pedido.cliente.nome}}">
             </div>
             <div class="form-group col">
                 <label for="data">Data</label>
@@ -16,10 +18,10 @@
         </div>
 
         <div class="form-row align-items-center">
-            <div class="form-group col-auto">
+            <div class="form-group col-md-4">
                 <label for="queijos">Queijos</label>
-                <select class="form-control" name="queijos" id="queijos" class="form-control" ng-model="vm.queijo">
-                    <option ng-repeat="queijo in vm.queijos" ng-value="{{queijo}}">{{vm.queijoItemFormat(queijo)}}</option>
+                <select ng-disabled="vm.queijos.length == 0" class="form-control" name="queijos" id="queijos" class="form-control" ng-model="vm.queijo">
+                    <option ng-repeat="queijo in vm.queijos" ng-value="{{queijo}}">{{::vm.queijoItemFormat(queijo)}}</option>
                 </select>
             </div>
 
@@ -30,21 +32,30 @@
         </div>
     </div>
 
+    <div ng-if="vm.pedido.id" class="alert alert-danger" role="alert">
+        Atenção, o valor do pedido sera re-calculado ao atualizar.
+    </div>
+
     <table class="table table-striped table-bordered" ng-if="vm.pedido.itens.length > 0">
         <thead class="thead-dark">
             <tr>
-                <th scope="col">Queijos</th>
+                <th class="col-auto">Queijos<span class="badge badge-primary">Total: R${{vm.valorTotal()}}</span> <span class="badge badge-primary">Peso: {{vm.pesoTotal()}}Kg</span></th>
+                <th></th>
             </tr>
+
         </thead>
         <tbody>
             <tr ng-repeat="item in vm.pedido.itens">
-                <td>
+                <td class="col-md-8">
                     {{::vm.queijoItemFormat(item.queijo)}}
+                </td>
+                <td class="col-md-2">
+                    <button ng-click="vm.removerItem(item)" class="btn btn-danger">Remover</button>
                 </td>
             </tr>
         </tbody>
     </table>
-    
-    <button ng-disabled="form.$invalid" ng-click="vm.salvar()" type="submit" class="btn btn-primary">Cadastrar</button>
+
+    <button ng-disabled="form.$invalid" ng-click="vm.salvar()" type="submit" class="btn btn-primary">{{(vm.pedido.id) ? "Atualizar" : "Cadastrar"}}</button>
 
 </form>

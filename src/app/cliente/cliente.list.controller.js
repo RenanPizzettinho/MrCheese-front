@@ -1,10 +1,11 @@
 export default class ClienteListController {
 
-    constructor($state, ClienteService) {
+    constructor($state, ClienteService, Notification) {
 
         this.$state = $state;
         this.clientes = [];
         this.ClienteService = ClienteService;
+        this.Notification = Notification;
 
         this.onInit();
 
@@ -32,10 +33,19 @@ export default class ClienteListController {
     excluir(cliente) {
 
         this.ClienteService.remove(cliente.id)
-            .then(() => this.getClientes());
+            .then(() => {
+
+                this.getClientes();
+                this.Notification.success('Registro removido');
+
+            }).catch(() => {
+
+                this.Notification.error('Erro ao remover o registro');
+
+            });
 
     }
 
 }
 
-ClienteListController.$inject = ['$state', 'ClienteService'];
+ClienteListController.$inject = ['$state', 'ClienteService', 'Notification'];

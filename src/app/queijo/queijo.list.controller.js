@@ -3,13 +3,14 @@ import util from "../util/util";
 
 export default class QueijoListController {
 
-    constructor($state, QueijoService) {
+    constructor($state, QueijoService, Notification) {
 
         this.$state = $state;
 
         this.queijos = [];
         this.QueijoService = QueijoService;
         this.formatarData = util.formatarData;
+        this.Notification = Notification;
 
         this.onInit();
 
@@ -30,7 +31,12 @@ export default class QueijoListController {
     excluir(queijo) {
 
         this.QueijoService.remove(queijo.id)
-            .then(() => this.getQueijos());
+            .then(() => {
+             
+                this.Notification.success('Queijo excluido');
+                this.getQueijos();
+            
+            }).catch(() => this.Notification.error('Erro ao excluir'));
 
     }
 
@@ -63,9 +69,9 @@ export default class QueijoListController {
     }
 
     byStatus(status) {
-        
+
         this.desmarcar();
-        
+
         this.QueijoService.byStatus(status)
             .then((queijos) => this.queijos = queijos);
 
@@ -82,4 +88,4 @@ export default class QueijoListController {
 
 }
 
-QueijoListController.$inject = ['$state', 'QueijoService'];
+QueijoListController.$inject = ['$state', 'QueijoService', 'Notification'];

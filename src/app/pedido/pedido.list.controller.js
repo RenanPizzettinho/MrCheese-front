@@ -3,11 +3,12 @@ import util from "../util/util";
 
 export default class PedidoListController {
 
-    constructor($state, PedidoService) {
+    constructor($state, PedidoService, Notification) {
 
         this.pedidos = [];
         this.$state = $state;
         this.PedidoService = PedidoService;
+        this.Notification = Notification;
         this.formatarData = util.formatarData;
 
         this.onInit();
@@ -91,37 +92,73 @@ export default class PedidoListController {
     aprovar(pedido) {
 
         this.PedidoService.aprovar(pedido)
-            .then(() => this.emAberto());
+            .then(() => {
+
+                this.Notification.success('Pedido aprovado');
+                this.emAberto();
+
+            }).catch(() => {
+                
+                this.Notification.error('Erro ao aprovar pedido');
+            
+            });
 
     }
 
     entregar(pedido) {
 
         this.PedidoService.entregar(pedido)
-            .then(() => this.aprovado());
+            .then(() => {
+
+                this.Notification.success('Pedido entregue');
+                this.aprovado();
+
+            }).catch(() => {
+                
+                this.Notification.error('Erro ao entregar pedido');
+            
+            });
 
     }
 
     cancelar(pedido) {
 
         this.PedidoService.cancelar(pedido)
-            .then(() => (this.isEmAberto) ? this.emAberto() : this.aprovado());
+            .then(() => {
+
+                this.Notification.success('Pedido cancelado');
+                (this.isEmAberto) ? this.emAberto() : this.aprovado();
+
+            }).catch(() => {
+                
+                this.Notification.error('Erro ao cancelar pedido');
+            
+            });
 
     }
 
     editar(pedido) {
 
-        this.$state.go('pedido.edit', { id : pedido.id });
+        this.$state.go('pedido.edit', { id: pedido.id });
 
     }
 
     excluir(pedido) {
 
         this.PedidoService.remove(pedido.id)
-            .then(() => (this.isEmAberto) ? this.emAberto() : this.aprovado());
+            .then(() => {
+            
+                this.Notification.success('Pedido excluido');
+                (this.isEmAberto) ? this.emAberto() : this.aprovado();
+            
+            }).catch(() => {
+                
+                this.Notification.error('Erro ao excluir pedido');
+            
+            });
 
     }
 
 }
 
-PedidoListController.$inject = ['$state', 'PedidoService'];
+PedidoListController.$inject = ['$state', 'PedidoService', 'Notification'];

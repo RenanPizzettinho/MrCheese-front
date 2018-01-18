@@ -24,7 +24,7 @@
             <p class="card-text">Peso {{::queijo.peso}}Kg</p>
             <p class="card-text">Lote {{::vm.formatarData(queijo.lote)}}</p>
         </div>
-        <div class="card-body">
+        <div class="card-body" ng-if="vm.isDisponivel">
                 <button ng-click="vm.editar(queijo)" class="btn btn-sm btn-primary col-auto">Editar</button>
                 <button ng-click="vm.excluir(queijo)" class="btn btn-sm btn-danger col-auto">Excluir</button>
         </div>

@@ -20,6 +20,11 @@ export default class PedidoService extends AbstractCrudService {
 
     efetuar(pedido) {
 
+        if (pedido.id) {
+
+            return this.$http.put(`${WEB_PATH}/pedido/efetuar/${pedido.id}`, pedido);
+
+        }
         return this.$http.post(`${WEB_PATH}/pedido/efetuar`, pedido);
 
     }

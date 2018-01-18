@@ -1,10 +1,11 @@
 export default class ClienteFormController {
 
-    constructor($stateParams, $state, ClienteService) {
+    constructor($stateParams, $state, ClienteService, Notification) {
 
         this.cliente = {};
         this.$state = $state;
         this.ClienteService = ClienteService;
+        this.Notification = Notification;
 
         if ($stateParams.id) {
 
@@ -18,11 +19,16 @@ export default class ClienteFormController {
     cadastrar() {
 
         this.ClienteService.save(this.cliente)
-            .then(() => this.$state.go('cliente.list'));
+            .then(() => {
+                
+                this.Notification.success('Registro criado');
+                this.$state.go('cliente.list')
+            
+            }).catch(() => this.Notification.error('Erro ao criar o registro'));
 
 
     }
 
 }
 
-ClienteFormController.$inject = ['$stateParams', '$state', 'ClienteService']
+ClienteFormController.$inject = ['$stateParams', '$state', 'ClienteService', 'Notification'];

@@ -1,26 +1,29 @@
+import util from '../util/util';
+
 export default class PedidoFormController {
 
-    constructor($stateParams, $state, PedidoService, QueijoService, ConfiguracaoSevice, ClienteService) {
+    constructor($stateParams, $state, PedidoService, QueijoService, ConfiguracaoSevice, ClienteService, Notification) {
 
         this.$state = $state;
 
         this.pedido = {};
         this.pedido.itens = [];
         this.queijos = [];
-        this.queijosSelecionados = [];
         this.clientes = [];
 
         this.PedidoService = PedidoService;
         this.QueijoService = QueijoService;
         this.ConfiguracaoSevice = ConfiguracaoSevice;
         this.ClienteService = ClienteService;
+        this.Notification = Notification;
 
         if ($stateParams.id) {
             this.PedidoService.findById($stateParams.id)
                 .then((pedido) => {
-                    this.pedido.cliente = pedido.cliente;
+
+                    this.pedido = pedido;
                     this.pedido.data = new Date(pedido.data);
-                    this.pedido.itens = pedido.itens;
+
                 });
         }
 
@@ -60,26 +63,57 @@ export default class PedidoFormController {
     queijoItemFormat(queijo) {
 
         if (this.preco == undefined) {
-            return `${queijo.peso}Kg (${queijo.lote})`
+            return `${queijo.peso}Kg (${util.formatarData(queijo.lote)})`
         }
 
-        return `R$${queijo.peso * this.preco.valor} - ${queijo.peso}Kg (${queijo.lote})`;
+        return `R$${queijo.peso * this.preco.valor} - ${queijo.peso}Kg (${util.formatarData(queijo.lote)})`;
 
     }
 
     addItem(queijo) {
 
-        this.pedido.itens.push({ queijo: queijo, valor: null });
+        this.pedido.itens.push({ queijo: queijo, valor: queijo.peso * this.preco.valor });
+        this.queijos = this.queijos.filter((item) => item.id != queijo.id);
 
     }
 
     salvar() {
 
         this.PedidoService.efetuar(this.pedido)
-            .then(() => this.$state.go('pedido.list'));
+            .then(() => {
+
+                this.Notification.success('Pedido realizado');
+                this.$state.go('pedido.list');
+
+            }).catch(() => this.Notification.error('Erro ao cadastar o pedido'));
+
+    }
+
+    removerItem(remover) {
+
+        this.pedido.itens = this.pedido.itens.filter((item) => item.queijo.id != remover.queijo.id);
+        this.queijos.push(remover.queijo);
+
+    }
+
+    valorTotal() {
+
+        if(this.pedido.itens.length == 0) return;
+
+        return this.pedido.itens.map(item => item.valor)
+            .reduce((x, y) => x + y);
+
+    }
+
+    pesoTotal() {
+
+        if(this.pedido.itens.length == 0) return;
+
+        return this.pedido.itens.map(item => item.queijo.peso)
+            .reduce((x, y) => x + y);
 
     }
 
 }
 
-PedidoFormController.$inject = ['$stateParams', '$state', 'PedidoService', 'QueijoService', 'ConfiguracaoSevice', 'ClienteService'];
+PedidoFormController.$inject = ['$stateParams', '$state', 'PedidoService', 'QueijoService', 'ConfiguracaoSevice', 'ClienteService', 'Notification'];

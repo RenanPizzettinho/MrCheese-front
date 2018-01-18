@@ -33,7 +33,7 @@
             <li ng-repeat="item in pedido.itens" class="list-group-item">{{vm.itemFormat(item)}}</li>
         </ul>
         <div class="card-body">
-            <button ng-if="vm.isEmAberto" ng-click="vm.aprovar(pedido)" class="btn btn-success btn-block">Aprovar</button>
+            <button ng-if="vm.isEmAberto && pedido.itens.length > 0" ng-click="vm.aprovar(pedido)" class="btn btn-success btn-block">Aprovar</button>
             <button ng-if="vm.isAprovado" ng-click="vm.entregar(pedido)" class="btn btn-success btn-block">Entregar</button>
             <button ng-if="(vm.isEmAberto || vm.isAprovado)" ng-click="vm.cancelar(pedido)" class="btn btn-warning btn-block">Cancelar</button>
         </div>
@@ -44,6 +44,6 @@
     </div>
 </div>
 
-<p ng-if="vm.pedidos.length === 0">
-    Não existe itens nessa situação.
-</p>
+<div ng-if="vm.pedidos.length === 0" class="alert alert-info" role="alert">
+    Não existem itens nessa situação.
+</div>
