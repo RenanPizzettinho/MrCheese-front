@@ -1,6 +1,5 @@
 import util from "../util/util";
 
-
 export default class PedidoListController {
 
     constructor($state, PedidoService, Notification) {

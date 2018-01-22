@@ -15,7 +15,15 @@ export default class ConfigFormController {
     getConfigAtual() {
 
         this.ConfiguracaoSevice.findAll()
-            .then((config) => this.config = config);
+            .then((config) => {
+                
+                if(config){
+
+                    this.config.valor = config;
+
+                }
+
+            });
 
     }
 

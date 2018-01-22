@@ -1,8 +1,54 @@
 <div class="container ">
 
-    <div class="progress mt-4">
-        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 500%" aria-valuenow="500" aria-valuemin="0"
-            aria-valuemax="500">500</div>
+    <div class="card mt-4">
+        <div class="card-header">
+            <div class="row">
+                <h2 class="col">Pedidos entregues entre as datas</h2>
+
+                <div class="form-group mr-2">
+                    <label>Inicial</label>
+                    <input ng-model="vm.dataIni" class="col  form-control" type="date">
+                </div>
+
+                <div class="form-group mr-2 ">
+                    <label>Final</label>
+                    <input ng-model="vm.dataFim" class="col form-control" type="date">
+                </div>
+
+                <button ng-click="vm.filtrar()" ng-disabled="!vm.dataIni && !vm.dataFim" class="col mr-2 btn btn-sm btn-primary">Aplicar</button>
+            
+            </div>
+        </div>
+        <div ng-if="!vm.filtrado.total" class="alert alert-info" role="alert">
+            Use os campos de data para aplicar um filtro.
+        </div>
+        <div ng-if="vm.filtrado.total == 0" class="alert alert-info" role="alert">
+                Nenhum registro entre as datas informadas.
+            </div>
+        <div ng-if="vm.filtrado.total" class="card-body">
+            <h4 class="mt-2">Total</h4>
+            <div class="progress" style="height: 50px;">
+                <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: {{vm.percentual(vm.filtrado.total, vm.filtrado.entregue)}}%"
+                    aria-valuenow="{{vm.filtrado.entregue}}" aria-valuemin="0" aria-valuemax="{{vm.filtrado.total}}">{{::vm.filtrado.entregue}}/{{::vm.filtrado.total}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="card mt-4">
+        <div class="card-header">
+            <h2>Pedidos entregues</h2>
+        </div>
+        <div class="card-body">
+            <h4 class="mt-2">Abertos nos ultimos 30 dias</h4>
+            <div class="progress" style="height: 50px;">
+                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{vm.percentual(vm.dash.total30Dias, vm.dash.entregue30Dias)}}%"
+                    aria-valuenow="{{vm.dash.entregue30Dias}}" aria-valuemin="0" aria-valuemax="{{vm.dash.total30Dias}}">{{::vm.dash.entregue30Dias}}/{{::vm.dash.total30Dias}}</div>
+            </div>
+            <h4 class="mt-2">Total</h4>
+            <div class="progress" style="height: 50px;">
+                <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: {{vm.percentual(vm.dash.total, vm.dash.entregue)}}%"
+                    aria-valuenow="{{vm.dash.entregue}}" aria-valuemin="0" aria-valuemax="{{vm.dash.total}}">{{::vm.dash.entregue}}/{{::vm.dash.total}}</div>
+            </div>
+        </div>
     </div>
 
 </div>
